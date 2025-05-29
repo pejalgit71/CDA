@@ -50,14 +50,16 @@ df.fillna(0, inplace=True)
 df["Total"] = df[['Mathematics', 'Science', 'English']].sum(axis=1)
 df["Percentage"] = df["Total"] / 3
 conditions = [
-    (df["Percentage"] >= 90),
-    (df["Percentage"] >= 80),
-    (df["Percentage"] >= 70),
-    (df["Percentage"] >= 60),
-    (df["Percentage"] < 60)
+    df["Percentage"] >= 90,
+    (df["Percentage"] >= 80) & (df["Percentage"] < 90),
+    (df["Percentage"] >= 70) & (df["Percentage"] < 80),
+    (df["Percentage"] >= 60) & (df["Percentage"] < 70),
+    df["Percentage"] < 60
 ]
 grades = ['A', 'B', 'C', 'D', 'F']
-df["Grade"] = np.select(conditions, grades)
+
+df["Grade"] = np.select(conditions, grades, default='N/A')
+
 
 # Save cleaned CSV
 # df.to_csv("students_cleaned.csv", index=False)
